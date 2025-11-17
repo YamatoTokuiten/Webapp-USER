@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Parking Details</title>
+<style>
+  body {
+    font-family: Cambria, serif;
+    margin: 0;
+    background: #f8f4e3;
+    color: #333;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+  }
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+  .container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  h1 {
+    font-weight: 700;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    text-align: center;
+  }
+  .details p {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  .details strong {
+    color: #27ae60;
+    width: 180px;
+    display: inline-block;
+  }
+  .btn {
+    align-self: center;
+    margin-top: 30px;
+    padding: 15px 60px;
+    background-color: #27ae60;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.3em;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .btn:hover {
+    background-color: #219150;
+  }
+  #page-transition {
+    position: fixed;
+    inset: 0;
+    background: white;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 999;
+  }
+  #page-transition.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+</style>
+</head>
+<body>
+  <div id="page-transition"></div>
+  <div class="container">
+    <h1>Parking Details</h1>
+    <div class="details">
+      <p><strong>Plate Number:</strong><span id="plateNumber"></span></p>
+      <p><strong>Parking Spot:</strong> A12</p>
+      <p><strong>Entry Time:</strong> 8:30 AM</p>
+      <p><strong>Expected Exit Time:</strong> 5:30 PM</p>
+      <p><strong>Payment Status:</strong> Paid</p>
+    </div>
+    <button class="btn" id="finishBtn">Finish</button>
+  </div>
+
+<script>
+  document.getElementById('plateNumber').textContent = sessionStorage.getItem('plateNumber') || 'Unknown';
+  const pageTransitionDiv = document.getElementById('page-transition');
+
+  document.getElementById('finishBtn').addEventListener('click', () => {
+    // Show fade overlay
+    pageTransitionDiv.classList.add('show');
+    setTimeout(() => {
+      // Navigate after fade
+      window.location.href = 'thankyou.html';
+    }, 500); // match transition duration
+  });
+</script>
+</body>
+</html>

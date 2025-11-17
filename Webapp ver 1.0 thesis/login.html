@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login</title>
+<style>
+  body {
+    font-family: Cambria, serif;
+    background: white;
+    animation: bgFade 2s forwards, fadeIn 0.8s ease forwards;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    opacity: 0;
+    transition: background-color 1s ease;
+  }
+  @keyframes bgFade {
+    to {
+      background: #f8f4e3;
+    }
+  }
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    75% { transform: translateX(-8px); }
+  }
+  .container {
+    width: 400px;
+    max-width: 95vw;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    padding: 30px 40px;
+    text-align: center;
+    position: relative;
+    transition: background-color 1s ease;
+  }
+  .container.shake {
+    animation: shake 0.4s;
+  }
+  .guide {
+    background-color: #fcf9f3;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 25px;
+    color: #555;
+    font-size: 1.14em;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .guide strong {
+    color: #2c3e50;
+  }
+  h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.9em;
+    font-weight: 700;
+  }
+  .input-group {
+    position: relative;
+    margin-bottom: 25px;
+  }
+  input[type=text], input[type=password] {
+    width: 100%;
+    padding: 14px 45px 14px 14px;
+    font-size: 1.2em;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+  }
+  input[type=text]:focus, input[type=password]:focus {
+    border-color: #27ae60;
+    outline: none;
+  }
+  #togglePassword {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    font-size: 1.3em;
+    cursor: pointer;
+    color: gray;
+    user-select: none;
+  }
+  button {
+    width: 100%;
+    padding: 14px 0;
+    background-color: #27ae60;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.25em;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.25s;
+  }
+  button:hover {
+    background-color: #219150;
+  }
+  .message {
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 1.1em;
+    min-height: 28px;
+  }
+  #page-transition {
+    position: fixed;
+    inset: 0;
+    background: white;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 999;
+  }
+  #page-transition.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+</style>
+</head>
+<body>
+  <div id="page-transition"></div>
+  <div class="container" id="container">
+    <div class="guide">
+      <p><strong>Username</strong> = Plate Number</p>
+      <p><strong>Password</strong> = Receipt Code</p>
+    </div>
+
+    <h2>Login</h2>
+
+    <div class="input-group">
+      <input id="username" type="text" placeholder="Enter plate number" autocomplete="username" />
+    </div>
+
+    <div class="input-group">
+      <input id="password" type="password" placeholder="Enter password" autocomplete="current-password" />
+      <span id="togglePassword">&#128065;</span>
+    </div>
+
+    <button id="confirmBtn">Confirm</button>
+    <div id="message" class="message"></div>
+  </div>
+
+<script>
+  const container = document.getElementById('container');
+  const passwordInput = document.getElementById('password');
+  const togglePassword = document.getElementById('togglePassword');
+  const confirmBtn = document.getElementById('confirmBtn');
+  const usernameInput = document.getElementById('username');
+  const message = document.getElementById('message');
+  const pageTransitionDiv = document.getElementById('page-transition');
+
+  togglePassword.addEventListener('click', () => {
+    const type = passwordInput.getAttribute('type');
+    if (type === 'password') {
+      passwordInput.setAttribute('type', 'text');
+      togglePassword.style.color = '#27ae60';
+    } else {
+      passwordInput.setAttribute('type', 'password');
+      togglePassword.style.color = 'gray';
+    }
+  });
+
+  confirmBtn.addEventListener('click', () => {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    const validUsername = "KMY 420";
+    const validPassword = "Mikatrix";
+
+    const usernameValid = username.toUpperCase() === validUsername;
+    const passwordValid = password === validPassword;
+
+    if (!usernameValid || !passwordValid) {
+      message.textContent = 'Error, invalid credentials';
+      message.style.color = '#e74c3c';
+      container.classList.add('shake');
+      document.body.style.backgroundColor = '#ff7272'; // red background
+
+      setTimeout(() => {
+        container.classList.remove('shake');
+        document.body.style.backgroundColor = '#f8f4e3'; // back to cream
+      }, 1000);
+    } else {
+      message.textContent = 'Login successful!';
+      message.style.color = '#27ae60';
+      document.body.style.backgroundColor = '#7cd28a'; // green background
+
+      // After 1 second, fade transition and redirect
+      setTimeout(() => {
+        pageTransitionDiv.classList.add('show');
+      }, 1000);
+
+      sessionStorage.setItem('plateNumber', username);
+
+      setTimeout(() => {
+        window.location.href = 'parking-details.html';
+      }, 1500);
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Thank You</title>
+<style>
+  body {
+    font-family: Cambria, serif;
+    margin: 0;
+    background-color: #fff;
+    color: #2c3e50;
+    text-align: center;
+    padding: 0 20px;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 2s ease forwards, bgTransition 3s ease forwards;
+    transition: opacity 1s ease;
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  @keyframes bgTransition {
+    to { background-color: #f8f4e3; }
+  }
+  h1 {
+    font-size: 3em;
+    margin-top: 40vh;
+    font-weight: 700;
+  }
+  p {
+    font-size: 1.25em;
+    max-width: 600px;
+    margin: 20px auto;
+  }
+</style>
+</head>
+<body>
+  <h1>Thank You!</h1>
+  <p>Your parking session has been completed successfully.</p>
+
+<script>
+  // Wait 2 seconds (fade-in duration),
+  // then fade out opacity for 1 second,
+  // then redirect to welcome page
+  setTimeout(() => {
+    document.body.style.opacity = '0';
+
+    setTimeout(() => {
+      window.location.href = 'welcome.html'; // Adjust as necessary
+    }, 1000); // Matches CSS transition duration
+  }, 2000); // 2 seconds visible after fade-in
+</script>
+</body>
+</html>

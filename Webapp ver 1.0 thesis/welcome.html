@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Welcome</title>
+<style>
+ /* Your current styles here */
+ body, html {
+   height: 100%;
+   margin: 0;
+   font-family: 'Cambria', serif;
+   background: linear-gradient(135deg, #f8f4e3, #e7dfc5);
+   color: #333;
+   overflow: hidden;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   user-select: none;
+
+   /* Add fade-in animation */
+   opacity: 0;
+   animation: fadeIn 2s ease forwards;
+ }
+
+ @keyframes fadeIn {
+   to {
+     opacity: 1;
+   }
+ }
+
+ /* The rest of your existing styles */
+ .welcome-container {
+   background: white;
+   padding: 40px 60px;
+   border-radius: 12px;
+   box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+   text-align: center;
+   max-width: 400px;
+   width: 90%;
+   position: relative;
+   z-index: 10;
+ }
+ h1 {
+   font-size: 2.8rem;
+   margin-bottom: 20px;
+   font-weight: 700;
+   color: #2c3e50;
+ }
+ p {
+   font-size: 1.25rem;
+   margin-bottom: 25px;
+   color: #555;
+ }
+ #tapMessage {
+   font-size: 1rem;
+   color: #777;
+ }
+ /* The expanding circular overlay */
+ #transitionCircle {
+   position: fixed;
+   top: 0; left: 0;
+   width: 0;
+   height: 0;
+   border-radius: 50%;
+   background-color: #fff;
+   pointer-events: none;
+   z-index: 1000;
+   transition: width 0.6s ease-out, height 0.6s ease-out;
+   transform: translate(-50%, -50%);
+ }
+</style>
+</head>
+<body>
+  <div class="welcome-container" id="welcomeContainer">
+    <h1>Welcome!</h1>
+    <p>Tap anywhere to start your parking session.</p>
+    <p id="tapMessage">Tap anywhere on the screen</p>
+  </div>
+
+  <div id="transitionCircle"></div>
+
+  <script>
+    const welcomeContainer = document.getElementById('welcomeContainer');
+    const transitionCircle = document.getElementById('transitionCircle');
+
+    document.body.addEventListener('click', (event) => {
+      const x = event.clientX;
+      const y = event.clientY;
+
+      transitionCircle.style.left = x + 'px';
+      transitionCircle.style.top = y + 'px';
+      transitionCircle.style.width = '0px';
+      transitionCircle.style.height = '0px';
+      transitionCircle.style.display = 'block';
+
+      // Trigger reflow
+      void transitionCircle.offsetWidth;
+
+      const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
+      const dx = x > vw / 2 ? 0 : vw;
+      const dy = y > vh / 2 ? 0 : vh;
+
+      const radius = Math.sqrt(Math.pow(Math.abs(dx - x), 2) + Math.pow(Math.abs(dy - y), 2));
+      transitionCircle.style.width = transitionCircle.style.height = radius * 2 + 'px';
+
+      transitionCircle.addEventListener('transitionend', () => {
+        window.location.href = 'login.html';
+      }, { once: true });
+    }, { once: true });
+  </script>
+</body>
+</html>
